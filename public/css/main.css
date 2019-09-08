@@ -212,6 +212,7 @@ main {
 #pro{
     background: white;
     padding: 20px;
+    margin: 10px;
 }
 .proimg{
     margin: 0 auto;
@@ -231,6 +232,15 @@ main {
 
 .boximg:active{
     transform: translateY(4px);
+}
+
+.meta{
+
+}
+.meta span{
+    vertical-align: bottom;
+    display: inline-block;
+    height: 30px;
 }
 
 /* end product */
