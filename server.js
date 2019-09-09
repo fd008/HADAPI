@@ -81,7 +81,7 @@ app.get('/users/:id', function (req, res) {
 
 app.get('/projects', function (req, res) {
     console.log('\ninside /projects/');
-    var url = apiData.apiUrl + '/projects' + apiData.apiKey + '&sortby=views&per_page=20';
+    var url = apiData.apiUrl + '/projects' + apiData.apiKey + '&sortby=views&per_page=10';
     console.log('\nProject Data Query: ', url);
 
     request.get(url, function (error, response, body) {
@@ -107,19 +107,34 @@ app.get("/projects/:id", function (req, res) {
 
     request.get(url, function (err, response, body) {
         var bodyData = parseJSON(body);
-        console.log(bodyData);
-        res.render('spro', {
-            locals: {
-                dataType: 'Single Product',
-                data: bodyData
-            },
-            partials: {
-                nav: __dirname + "/views/partials/nav.html",
-                footer: __dirname + "/views/partials/footer.html"
-            }
+        var related;
+        //console.log(bodyData);
+
+        var url1 = apiData.apiUrl + '/search/' + apiData.apiKey + '&search_term=' + bodyData.tags[0] + "+" + bodyData.tags[1] + '&per_page=6';
+        console.log(url1);
+
+        request.get(url1, function (err, response, bd) {
+            related = parseJSON(bd);
+
+            res.render('spro', {
+                locals: {
+                    dataType: 'Single Product',
+                    data: bodyData,
+                    related: related.results
+                },
+                partials: {
+                    nav: __dirname + "/views/partials/nav.html",
+                    footer: __dirname + "/views/partials/footer.html"
+                }
+            })
         })
     })
-})
+});
+
+
+
+
+
 
 // Queries HAD API for project data
 app.get('/projects/skulls', function (req, res) {

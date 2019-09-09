@@ -209,7 +209,7 @@ main {
 
 /* start product */
 
-#pro{
+.pro{
     background: white;
     padding: 20px;
     margin: 10px;
@@ -241,6 +241,22 @@ main {
     vertical-align: bottom;
     display: inline-block;
     height: 30px;
+}
+
+.tags span{
+    
+    border-radius: 5px;
+    color: #ffffff;
+    padding: 5px;
+    white-space: nowrap;
+    background: #c3c3c3;
+    margin: 5px;
+}
+
+.tags span:hover{
+    color: #2fa4ea;
+    background: white;
+    border: 1px solid #2fa4ea;
 }
 
 /* end product */
