@@ -241,6 +241,10 @@ main {
     height: 30px;
 }
 
+.tags{
+    margin-top: 50px;
+}
+
 .tags span{
     
     border-radius: 5px;

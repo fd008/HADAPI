@@ -81,7 +81,7 @@ app.get('/users/:id', function (req, res) {
 
 app.get('/projects', function (req, res) {
     console.log('\ninside /projects/');
-    var url = apiData.apiUrl + '/projects' + apiData.apiKey + '&sortby=views&per_page=10';
+    var url = apiData.apiUrl + '/projects' + apiData.apiKey + '&sortby=skulls&per_page=10';
     console.log('\nProject Data Query: ', url);
 
     request.get(url, function (error, response, body) {
@@ -103,31 +103,34 @@ app.get("/projects/:id", function (req, res) {
 
     console.log("\n inside /projects/:id");
     var url = apiData.apiUrl + '/projects/' + req.params.id + apiData.apiKey;
-    console.log("\n project data query: ", url);
+    console.log("\n project id data query: ", url);
 
     request.get(url, function (err, response, body) {
         var bodyData = parseJSON(body);
-        var related;
-        //console.log(bodyData);
 
-        var url1 = apiData.apiUrl + '/search/' + apiData.apiKey + '&search_term=' + bodyData.tags[0] + "+" + bodyData.tags[1] + '&per_page=6';
-        console.log(url1);
 
-        request.get(url1, function (err, response, bd) {
-            related = parseJSON(bd);
+        if (bodyData.project == 0) {
+            res.redirect('/projects');
+        } else {
+            var url1 = apiData.apiUrl + '/search/' + apiData.apiKey + '&search_term=' + bodyData.tags[0] + "+" + bodyData.tags[1] + '&per_page=6';
 
-            res.render('spro', {
-                locals: {
-                    dataType: 'Single Product',
-                    data: bodyData,
-                    related: related.results
-                },
-                partials: {
-                    nav: __dirname + "/views/partials/nav.html",
-                    footer: __dirname + "/views/partials/footer.html"
-                }
+
+            request.get(url1, function (err, response, bd) {
+                var related = parseJSON(bd);
+
+                res.render('spro', {
+                    locals: {
+                        dataType: 'Single Product',
+                        data: bodyData,
+                        related: related.results
+                    },
+                    partials: {
+                        nav: __dirname + "/views/partials/nav.html",
+                        footer: __dirname + "/views/partials/footer.html"
+                    }
+                })
             })
-        })
+        }
     })
 });
 

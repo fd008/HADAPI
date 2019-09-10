@@ -11,7 +11,8 @@
             <div class="ms flex f1 wrap">
                 ${dataType ?
                 data.map((e)=>`
-                <a href="${e.id}" data-owner-id="${e.owner_id}" class="card">
+                <a href="/projects/${e.id}" data-owner-id="${e.owner_id}"
+                    class="card">
                     <h2>${e.name}</h2>
                     <section class="imgbox">
                         <img src="${e.image_url ? e.image_url :
@@ -100,7 +101,7 @@
                         </div>
                     </section>
                 </a>
-                `).join("") : `<p>No projects to show</p>`
+                `).join("") : `<a href="projects">Projects</a>`
                 }
             </div>
         </main>
