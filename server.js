@@ -81,11 +81,14 @@ app.get('/users/:id', function (req, res) {
 
 app.get('/projects', function (req, res) {
     console.log('\ninside /projects/');
-    var url = apiData.apiUrl + '/projects' + apiData.apiKey + '&sortby=skulls&per_page=10';
+    var page = req.query.page ? req.query.page : 1;
+
+    var url = apiData.apiUrl + '/projects' + apiData.apiKey + `&sortby=views&per_page=10&page=${page}`;
     console.log('\nProject Data Query: ', url);
 
     request.get(url, function (error, response, body) {
         var bodyData = parseJSON(body);
+
         res.render('index', {
             locals: {
                 dataType: 'Latest Projects',
@@ -96,8 +99,38 @@ app.get('/projects', function (req, res) {
                 footer: __dirname + "/views/partials/footer.html"
             }
         });
+
     });
 });
+
+//for client side api call
+app.get("/client", function (req, res) {
+    console.log('\ninside /clients/');
+    var page = req.query.page ? req.query.page : 1;
+
+    var url = apiData.apiUrl + '/projects' + apiData.apiKey + `&sortby=views&per_page=10&page=${page}`;
+    console.log('\nProject Data Query: ', url);
+
+    request.get(url, function (error, response, body) {
+        var bodyData = parseJSON(body);
+        if (!error && response.statusCode === 200) {
+            res.render('client', {
+                locals: {
+                    dataType: 'Latest Projects',
+                    data: bodyData.projects,
+                },
+                partials: {
+                    nav: __dirname + "/views/partials/nav.html",
+                    footer: __dirname + "/views/partials/footer.html"
+                }
+
+            });
+        } else {
+            res.render("<p>Not data found!</p>");
+        }
+
+    });
+})
 
 app.get("/projects/:id", function (req, res) {
 
@@ -107,28 +140,32 @@ app.get("/projects/:id", function (req, res) {
 
     request.get(url, function (err, response, body) {
         var bodyData = parseJSON(body);
+        console.log(bodyData)
 
-
-        if (bodyData.project == 0) {
+        if (bodyData.project == 0 || bodyData.error || err) {
             res.redirect('/projects');
         } else {
             var url1 = apiData.apiUrl + '/search/' + apiData.apiKey + '&search_term=' + bodyData.tags[0] + "+" + bodyData.tags[1] + '&per_page=6';
 
 
-            request.get(url1, function (err, response, bd) {
-                var related = parseJSON(bd);
+            request.get(url1, function (error, response, bd) {
+                if (!error && response.statusCode === 200) {
+                    var related = parseJSON(bd);
+                    res.render('spro', {
+                        locals: {
+                            dataType: 'Single Product',
+                            data: bodyData,
+                            related: related.results
+                        },
+                        partials: {
+                            nav: __dirname + "/views/partials/nav.html",
+                            footer: __dirname + "/views/partials/footer.html"
+                        }
+                    })
+                } else {
+                    res.redirect("/projects");
+                }
 
-                res.render('spro', {
-                    locals: {
-                        dataType: 'Single Product',
-                        data: bodyData,
-                        related: related.results
-                    },
-                    partials: {
-                        nav: __dirname + "/views/partials/nav.html",
-                        footer: __dirname + "/views/partials/footer.html"
-                    }
-                })
             })
         }
     })

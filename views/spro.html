@@ -14,7 +14,8 @@
                 <h1>${data.name}</h1>
                 <div>${data.summary}</div>
                 <div class="proimg">
-                    <img src="${data.image_url}" alt="">
+                    <img src="${data.image_url ? data.image_url :
+                        'https://placeimg.com/350/350/any'}" alt="">
                     <section class="flex evenspace meta">
                         ${data.views > 0 ? `<div>
                             <span><svg width="20" height="20"
@@ -113,7 +114,8 @@
                     <a href="${e.id}" class="card">
                         <h2>${e.name}</h2>
                         <section class="imgbox">
-                            <img src="${e.image_url}" alt="">
+                            <img src="${e.image_url ? e.image_url :
+                                'https://placeimg.com/350/350/any' }" alt="">
                         </section>
                         <section class="flex center">
                             ${e.views > 0 ? `<div>

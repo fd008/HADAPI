@@ -8,7 +8,7 @@
     <body>
         ${nav}
         <main id="main">
-            <div class="ms flex f1 wrap">
+            <section id="info" class="ms flex f1 wrap">
                 ${dataType ?
                 data.map((e)=>`
                 <a href="/projects/${e.id}" data-owner-id="${e.owner_id}"
@@ -103,8 +103,70 @@
                 </a>
                 `).join("") : `<a href="projects">Projects</a>`
                 }
-            </div>
+            </section>
+            <section id="pagination" class="flex pagination">
+                <a style="display: none;" id="prev" href="/client?page=1">Prev</a>
+                <a id="next" href="/client?page=2">Next</a>
+            </section>
         </main>
         ${footer}
+        <script>
+            var next = document.getElementById("next");
+            var prev = document.getElementById("prev");
+            var info = document.getElementById("info");
+            var para = new URLSearchParams(location.search);
+            var pCount = 1;
+            var fetchUrl = '/client?page=' + pCount;
+            var pushUrl = 'http://localhost:3000/projects?page=' + pCount;
+        
+            if(para.get("page")){
+                pCount = para.get("page");
+            }
+        
+            next.addEventListener("click", function(e){
+                e.preventDefault();
+                pCount++;
+                prev.style.display = "block";
+                fetchUrl = '/client?page=' + pCount;
+                handlePageClick(this);
+                pushUrl = 'http://localhost:3000/projects?page=' + pCount;
+            });
+        
+            prev.addEventListener("click", function(e){
+                e.preventDefault();
+                if(pCount > 1){
+                    pCount--;
+                }
+                fetchUrl = '/client?page=' + pCount;
+                handlePageClick(this);
+                pushUrl = 'http://localhost:3000/projects?page=' + pCount;
+            });
+        
+            function handlePageClick(elm){
+                
+                fetch(fetchUrl)
+                    .then(function(res){
+                        return res.text()
+                    })
+                    .then(function(data){
+                        remove();
+                        add(data);
+                        history.pushState(null, null, pushUrl)
+                        
+                    })
+                    .catch(function(err){
+                        console.log(err);
+                    });
+            }
+
+            function remove(){
+                while(info.firstChild){ 
+                    info.removeChild(info.firstChild);
+                } 
+            }
+            function add(data){
+                info.innerHTML = data;
+            }
+            </script>
     </body>
 </html>
