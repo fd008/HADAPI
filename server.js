@@ -42,42 +42,10 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 
 app.get('/', function (req, res) {
     console.log('\ninside /');
-    res.render('index', {
-        locals: {
-            dataType: null,
-            apiData: null
-        },
-        partials: {
-            nav: __dirname + "/views/partials/nav.html",
-            footer: __dirname + "/views/partials/footer.html"
-        }
-    });
+    res.redirect("/projects");
 });
 
-// Queries HAD API for user data
-app.get('/users/:id', function (req, res) {
-    console.log('\ninside /users/:id');
 
-    var id = req.params.id,
-        url = apiData.apiUrl + '/users/' + id + apiData.apiKey;
-
-    console.log('\nUser Data Query: ', url);
-
-    request.get(url, function (error, response, body) {
-        if (!error && response.statusCode === 200) {
-            var bodyData = parseJSON(body);
-            res.render('index', {
-                locals: {
-                    dataType: 'Top Skulled Projects',
-                    data: bodyData
-                }
-            });
-        } else {
-            console.log('\nError: ', error, '\nResponse body: ', body);
-            res.render(body);
-        }
-    });
-});
 
 app.get('/projects', function (req, res) {
     console.log('\ninside /projects/');
@@ -171,25 +139,6 @@ app.get("/projects/:id", function (req, res) {
     })
 });
 
-
-
-
-
-
-// Queries HAD API for project data
-app.get('/projects/skulls', function (req, res) {
-    console.log('\ninside /projects/skulls');
-    var url = apiData.apiUrl + '/projects' + apiData.apiKey + '&sortby=skulls';
-    console.log('\nProject Data Query: ', url);
-
-    request.get(url, function (error, response, body) {
-        var bodyData = parseJSON(body);
-        res.render('index', {
-            dataType: 'Top Skulled Projects',
-            apiData: bodyData
-        });
-    });
-});
 
 
 
