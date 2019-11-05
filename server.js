@@ -1,8 +1,8 @@
 var apiData = {};
 
-apiData.clientId = 'YoVebWfliMtQsIYf8lXNwbDVUia1iAm7DhF0Smz5uZSHZtZZ';
-apiData.clientSecret = 'XntoqdmpF0gYzey917XMM353iFP4KVOf48mg4xBIYWxp6Oqy';
-apiData.userKey = 'EMxcTDFaBy5K1YOK';
+apiData.clientId = process.env.id;
+apiData.clientSecret = process.env.secret;
+apiData.userKey = process.env.key;
 
 
 // HAD API URLs:
