@@ -10,7 +10,7 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.12.3",
+    "express": "^4.17.3",
     "express-es6-template-engine": "^2.1.9",
     "request": "^2.55.0"
   }
